@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Inventory</title>
+    <style>
+        /*
+           ============================================================================
+           RESTAURANT INVENTORY - FRONTEND
+           ============================================================================
+
+           This stylesheet is intentionally written in plain CSS (no frameworks)
+           so learners can read every line and understand how the browser renders
+           the page.
+
+           Design goals:
+           - Clean, modern look with a clear visual hierarchy.
+           - Responsive: works on laptops, tablets, and phones.
+           - Colour is used with meaning:
+                 green  = success / enough stock
+                 amber  = warning / low stock
+                 red    = danger / insufficient stock
+                 blue   = primary actions
+           - Plenty of whitespace so the interface does not feel crowded.
+        */
+
+        :root {
+            /* CSS custom properties (variables). Change one value here and it
+               updates everywhere it is used. */
+            --colour-bg: #f8f9fa;
+            --colour-surface: #ffffff;
+            --colour-text: #212529;
+            --colour-muted: #6c757d;
+            --colour-border: #dee2e6;
+            --colour-primary: #0d6efd;
+            --colour-primary-hover: #0b5ed7;
+            --colour-success: #198754;
+            --colour-warning: #ffc107;
+            --colour-danger: #dc3545;
+            --colour-danger-bg: #f8d7da;
+            --radius: 0.5rem;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--colour-bg);
+            color: var(--colour-text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: var(--colour-surface);
+            border-bottom: 1px solid var(--colour-border);
+            padding: 1.5rem 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .header-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--colour-primary);
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--colour-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Layout container */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--colour-surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.15rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Dashboard grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat {
+            background: var(--colour-surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--colour-primary);
+        }
+
+        .stat-label {
+            color: var(--colour-muted);
+            font-size: 0.9rem;
+        }
+
+        .stat.warning .stat-value {
+            color: var(--colour-danger);
+        }
+
+        /* Alert banner */
+        .alert {
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-danger {
+            background: var(--colour-danger-bg);
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+
+        .alert.hidden {
+            display: none;
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.875rem;
+            color: var(--colour-muted);
+            gap: 0.25rem;
+        }
+
+        input, select, button, textarea {
+            font: inherit;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--colour-border);
+            border-radius: var(--radius);
+            background: var(--colour-surface);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--colour-primary);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        }
+
+        button {
+            cursor: pointer;
+            background: var(--colour-primary);
+            color: white;
+            border-color: var(--colour-primary);
+            font-weight: 500;
+            transition: background 0.15s ease, transform 0.05s ease;
+        }
+
+        button:hover {
+            background: var(--colour-primary-hover);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button.secondary {
+            background: white;
+            color: var(--colour-primary);
+        }
+
+        button.secondary:hover {
+            background: #e7f1ff;
+        }
+
+        button.success {
+            background: var(--colour-success);
+            border-color: var(--colour-success);
+        }
+
+        button.danger {
+            background: var(--colour-danger);
+            border-color: var(--colour-danger);
+        }
+
+        button.warning {
+            background: var(--colour-warning);
+            border-color: var(--colour-warning);
+            color: #212529;
+        }
+
+        button.small {
+            padding: 0.35rem 0.6rem;
+            font-size: 0.8rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Inline action forms */
+        .inline-form {
+            display: none;
+            background: #f1f5f9;
+            border: 1px solid var(--colour-border);
+            border-radius: var(--radius);
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .inline-form.active {
+            display: flex;
+        }
+
+        .inline-form label {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        /* Table */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--colour-border);
+            white-space: nowrap;
+        }
+
+        th {
+            color: var(--colour-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .cell-stock {
+            min-width: 160px;
+        }
+
+        /* Stock bar visualisation */
+        .stock-bar-bg {
+            background: #e9ecef;
+            border-radius: 999px;
+            height: 10px;
+            width: 120px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+
+        .stock-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .stock-bar-fill.good {
+            background: var(--colour-success);
+        }
+
+        .stock-bar-fill.low {
+            background: var(--colour-warning);
+        }
+
+        .stock-bar-fill.critical {
+            background: var(--colour-danger);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-low {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        /* Empty state */
+        .empty {
+            text-align: center;
+            padding: 2rem;
+            color: var(--colour-muted);
+        }
+
+        /* Toast notifications */
+        #toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: var(--colour-surface);
+            border-left: 4px solid var(--colour-success);
+            box-shadow: var(--shadow-lg);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            min-width: 260px;
+            animation: slideIn 0.25s ease;
+        }
+
+        .toast.error {
+            border-left-color: var(--colour-danger);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        .muted {
+            color: var(--colour-muted);
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 640px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <div>
+                <h1>Restaurant Inventory</h1>
+                <p class="subtitle">Teaching example: frontend → API → Python brain → database</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast notifications appear here. -->
+    <div id="toast-container"></div>
+
+    <main class="container">
+        <!-- Low-stock alert banner. -->
+        <div id="low-stock-alert" class="alert alert-danger hidden">
+            <strong>⚠️ Low stock alert</strong>
+            <span id="low-stock-count">0</span> ingredient(s) need reordering.
+        </div>
+
+        <!-- Dashboard summary cards. -->
+        <section class="dashboard" aria-label="Dashboard">
+            <div class="stat">
+                <span id="stat-total" class="stat-value">0</span>
+                <span class="stat-label">Total Ingredients</span>
+            </div>
+            <div class="stat warning">
+                <span id="stat-low" class="stat-value">0</span>
+                <span class="stat-label">Low Stock</span>
+            </div>
+            <div class="stat">
+                <span id="stat-categories" class="stat-value">0</span>
+                <span class="stat-label">Categories</span>
+            </div>
+            <div class="stat">
+                <span id="stat-suppliers" class="stat-value">0</span>
+                <span class="stat-label">Suppliers</span>
+            </div>
+        </section>
+
+        <!-- Add ingredient form. -->
+        <section class="card">
+            <h2>➕ Add Ingredient</h2>
+            <form id="add-form">
+                <div class="form-grid">
+                    <label>
+                        SKU
+                        <input type="text" name="sku" placeholder="TOM-001" required>
+                    </label>
+                    <label>
+                        Name
+                        <input type="text" name="name" placeholder="Roma Tomatoes" required>
+                    </label>
+                    <label>
+                        Unit
+                        <input type="text" name="unit" placeholder="kg" required>
+                    </label>
+                    <label>
+                        Category
+                        <select name="category_id" id="category-select">
+                            <option value="">None</option>
+                        </select>
+                    </label>
+                    <label>
+                        Supplier
+                        <select name="supplier_id" id="supplier-select">
+                            <option value="">None</option>
+                        </select>
+                    </label>
+                    <label>
+                        Initial Stock
+                        <input type="number" step="0.001" name="current_stock" value="0" required>
+                    </label>
+                    <label>
+                        Reorder Level
+                        <input type="number" step="0.001" name="reorder_level" value="0">
+                    </label>
+                    <label>
+                        Cost / Unit
+                        <input type="number" step="0.01" name="cost_per_unit" placeholder="2.50">
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Add Ingredient</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Inventory table. -->
+        <section class="card">
+            <h2>📦 Inventory</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Stock</th>
+                            <th>Reorder</th>
+                            <th>Cost</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ingredients-body">
+                        <tr><td colspan="8" class="empty">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Recent transactions. -->
+        <section class="card">
+            <h2>📝 Recent Transactions</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ingredient</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <th>Reference</th>
+                            <th>When</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-body">
+                        <tr><td colspan="6" class="empty">No transactions yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

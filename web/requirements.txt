@@ -1,0 +1,7 @@
+# Extra dependencies for the web example.
+# Install these in addition to the main requirements.txt in the project root.
+
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.29,<1.0
+jinja2>=3.1,<4.0
+pydantic>=2.0,<3.0
