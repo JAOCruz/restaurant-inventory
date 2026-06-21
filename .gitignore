@@ -55,7 +55,7 @@ Thumbs.db
 # Teacher-only files
 # Uncomment the next line if you want to keep the Spanish teacher script
 # private and not share it with students in the repository.
-# GUIA_DOCENTE_ES.txt
+GUIA_DOCENTE_ES.txt
 
 # Any other private notes or answer keys can be added here:
 # teacher-notes/
