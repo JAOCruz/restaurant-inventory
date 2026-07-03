@@ -60,8 +60,8 @@ restaurant-inventory/
 
    ```bash
    cd restaurant-inventory
-   python -m venv .venv
-   source .venv/bin/activate
+   python -m venv .venv   
+   source .venv/bin/activate # .venv\Scripts\Activate.ps1 windows
    pip install -r requirements.txt
    pip install -e ".[dev]"
    ```
