@@ -103,6 +103,8 @@ A complete FastAPI + HTML/JS example is in the `web/` directory.  It reuses the
 same `InventoryManager` as the CLI, showing how the core business logic is
 independent of the user interface.
 
+R.
+
 ```bash
 cd web
 pip install -r requirements.txt
