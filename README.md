@@ -69,7 +69,7 @@ restaurant-inventory/
 2. **Initialize the database:**  #Nice69
 
    ```bash
-   ./scripts/init_db.sh
+   ./scripts/init_db.sh #./scripts/init_db.ps1 Windows
    ```
 
    Or use the Python CLI:
