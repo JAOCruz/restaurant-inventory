@@ -1,4 +1,4 @@
-# Restaurant Inventory System
+# Restaurant Inventory System Bobopz
 
 A professional, production-ready inventory management system for restaurants.
 It tracks ingredients, suppliers, categories, stock levels, and every stock
@@ -66,10 +66,10 @@ restaurant-inventory/
    pip install -e ".[dev]"
    ```
 
-2. **Initialize the database:**
+2. **Initialize the database:**  #Nice69
 
    ```bash
-   ./scripts/init_db.sh
+   ./scripts/init_db.sh #./scripts/init_db.ps1 Windows
    ```
 
    Or use the Python CLI:
